@@ -20,4 +20,6 @@ public @interface AdapterItemData {
      * @return class数组
      */
     Class<?>[] value();
+
+
 }

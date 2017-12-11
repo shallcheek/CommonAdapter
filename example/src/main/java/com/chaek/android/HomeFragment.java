@@ -60,9 +60,9 @@ public class HomeFragment extends BaseFragment {
                 mainSwitchListener.switchFragment(index);
             }
         });
-        commonAdapter.addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view,mList,false));
+        commonAdapter.addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view, mList, false));
         mList.setAdapter(commonAdapter);
-        commonAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view,mList,false));
+        commonAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view, mList, false));
         commonAdapter.notifyDataSetChanged();
         mList.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));
     }
@@ -75,8 +75,9 @@ public class HomeFragment extends BaseFragment {
     @AdapterItemData(value = {String.class, Integer.class})
     public static class MainItemView extends AbstractAdapterItemView<Object, CommonViewHolder> {
 
+
         @Override
-        public int getLayoutId(int position, @NonNull Object data) {
+        public int getLayoutId(int viewType) {
             return R.layout.main_item_view;
         }
 
@@ -91,7 +92,7 @@ public class HomeFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position, @NonNull Object data) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
             return new CommonViewHolder(view);
         }
     }

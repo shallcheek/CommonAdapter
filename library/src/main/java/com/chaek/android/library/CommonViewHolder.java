@@ -32,6 +32,10 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
         rootView = itemView;
     }
 
+    public void setRootView(View rootView) {
+        this.rootView = rootView;
+    }
+
     /**
      * @return 获取当前rootView
      */

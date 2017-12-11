@@ -47,7 +47,7 @@ public class StoreFragment extends BaseFragment {
             list.add(new CateItem(""));
         }
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 1000; i++) {
             list.add(new AppItem(""));
         }
         commonAdapter.setListData(list);
@@ -85,7 +85,7 @@ public class StoreFragment extends BaseFragment {
     public static class StoreAppItemView extends AbstractAdapterItemView<AppItem, CommonViewHolder> {
 
         @Override
-        public int getLayoutId(int position, @NonNull AppItem data) {
+        public int getLayoutId(int position) {
             return R.layout.stort_app_item_view;
         }
 
@@ -95,7 +95,7 @@ public class StoreFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position, @NonNull AppItem data) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position) {
             return new CommonViewHolder(view);
         }
     }
@@ -104,7 +104,7 @@ public class StoreFragment extends BaseFragment {
     public static class StoreCateItemView extends AbstractAdapterItemView<CateItem, CommonViewHolder> {
 
         @Override
-        public int getLayoutId(int position, @NonNull CateItem data) {
+        public int getLayoutId(int position) {
             return R.layout.stort_cate_item_view;
         }
 
@@ -114,7 +114,7 @@ public class StoreFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position, @NonNull CateItem data) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position) {
             return new CommonViewHolder(view);
         }
     }
@@ -124,7 +124,7 @@ public class StoreFragment extends BaseFragment {
 
 
         @Override
-        public int getLayoutId(int position, @NonNull RecommendItem data) {
+        public int getLayoutId(int position) {
             return R.layout.stort_recommend_item_view;
         }
 
@@ -134,7 +134,7 @@ public class StoreFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position, @NonNull RecommendItem data) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position) {
             return new CommonViewHolder(view);
         }
     }

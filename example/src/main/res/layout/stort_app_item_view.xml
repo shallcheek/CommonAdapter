@@ -29,7 +29,7 @@
         app:layout_constraintLeft_toRightOf="@id/app_image"
         app:layout_constraintTop_toBottomOf="parent" />
 
-    <com.chaek.android.RatingBar
+    <TextView
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,15 +38,15 @@
         android:text="Hello World!"
         app:layout_constraintLeft_toRightOf="@id/app_image"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:rating_flag="FIVE"
-        app:rating_star_color="#f21058"
-        app:rating_star_empty_color="#8e7d7d"
-        app:rating_star_height="10dp"
-        app:rating_star_margin="1dp"
-        app:rating_star_src="@drawable/star"
-        app:rating_star_width="10dp"
-        app:rating_start_count="3" />
-
+        />
+    <!--app:rating_flag="FIVE"-->
+    <!--app:rating_star_color="#f21058"-->
+    <!--app:rating_star_empty_color="#8e7d7d"-->
+    <!--app:rating_star_height="10dp"-->
+    <!--app:rating_star_margin="1dp"-->
+    <!--app:rating_star_src="@drawable/star"-->
+    <!--app:rating_star_width="10dp"-->
+    <!--app:rating_start_count="3"-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

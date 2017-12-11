@@ -1,5 +1,6 @@
 package com.chaek.android.library;
 
+import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
  * <br>
  * <code>new CommonKyAdapter().register(AbstractAdapterItemView.class)</code>
  * <br>
- * 重写 <br>{@link #getLayoutId(int, Object)},<br>{@link #onCreateViewHolder(View, int, Object)},<br>{@link #onBindViewHolder(CommonViewHolder, Object)}
+ * 重写 <br>{@link #getLayoutId(int)},<br>{@link #onCreateViewHolder(View, int)},<br>{@link #onBindViewHolder(CommonViewHolder, Object)}
  * 即可<br>
  * 注意事项:继承AbstractAdapterItemView使用一定要对应的注解相应的数据源格式 {@link AdapterItemData}
  * <p>
@@ -50,14 +51,19 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * 获取当前数据对应的布局文件ID
      * 创建成view 查看{@link CommonAdapter#onCreateViewHolder(ViewGroup, int)} }
      *
-     * @param position 数据源中的 index 可能不是Adapter的实际 position
-     *                 查看{@link CommonAdapter#getItemViewType(int)}
-     * @param data     data 当前item数据
+     * @param viewType viewType
      * @return 布局文件
      */
     @LayoutRes
-    public abstract int getLayoutId(int position, @NonNull T data);
+    public abstract int getLayoutId(int viewType);
 
+    /**
+     * 获取itemViewType
+     */
+    @IntRange(from = 0, to = 100)
+    public int getItemViewType(int position, @NonNull T data) {
+        return 0;
+    }
 
     /**
      * 将item 与 ViewHolder绑定起来 用作正常的参数设置数据绑定
@@ -69,15 +75,18 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      */
     public abstract void onBindViewHolder(@NonNull R vh, @NonNull T data);
 
+    public AbstractAdapterItemView<T, R> getAdapterItemView(int viewType) {
+        return this;
+    }
+
     /**
      * 初始化创建 BaseViewHolder
      *
-     * @param view     来自{@link #getLayoutId(int, Object)} 对应的布局文件创建的View
-     * @param position 数据源中的 index 可能不是Adapter的实际 position 查看{@link CommonAdapter#getItemViewType(int)}
-     * @param data     数据
+     * @param view     来自{@link #getLayoutId(int)} 对应的布局文件创建的View
+     * @param viewType 数据源中的 index 可能不是Adapter的实际 position 查看{@link CommonAdapter#getItemViewType(int)}
      * @return 新建的BaseViewHolder
      */
-    public abstract R onCreateViewHolder(@NonNull View view, int position, @NonNull T data);
+    public abstract R onCreateViewHolder(@NonNull View view, int viewType);
 
     /**
      * 同{@link RecyclerView.Adapter#onViewRecycled(RecyclerView.ViewHolder)}
@@ -104,5 +113,7 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param data   数据源 可能为空
      */
     public void onViewDetachedFromWindow(@NonNull R holder, T data) {
+        holder.setOnClickListener(null);
+        holder.onBindAdapterItemView(null);
     }
 }

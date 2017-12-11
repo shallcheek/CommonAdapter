@@ -3,15 +3,16 @@
 package com.chaek.android.library;
 
 import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implements View.OnClickListener {
@@ -21,7 +22,9 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     private List<View> mHeaderViews, mFooterViews;
     private List<Object> listData;
     private OnRecyclerItemClickListener onRecyclerClickListener;
-    private ArrayMap<Class, AbstractAdapterItemView> mItemTypesOffset;
+    private List<Class> classList;
+    private List<AbstractAdapterItemView> itemViewList;
+    private HashMap<Integer, Integer> positionTypeMap;
 
     public CommonAdapter() {
         this(null);
@@ -30,7 +33,9 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     public CommonAdapter(List listData) {
         mHeaderViews = new ArrayList<>();
         mFooterViews = new ArrayList<>();
-        mItemTypesOffset = new ArrayMap<>();
+        classList = new ArrayList<>();
+        itemViewList = new ArrayList<>();
+        positionTypeMap = new HashMap<Integer, Integer>(50);
         if (listData == null) {
             listData = new ArrayList<>();
         }
@@ -61,7 +66,8 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         itemViewHolder.setCommonAdapter(this);
         Class<?>[] annotationClass = annotation.value();
         for (Class<?> c : annotationClass) {
-            mItemTypesOffset.put(c, itemViewHolder);
+            classList.add(c);
+            itemViewList.add(itemViewHolder);
         }
         return this;
     }
@@ -69,24 +75,25 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     @Override
     public void onViewRecycled(CommonViewHolder holder) {
         super.onViewRecycled(holder);
-        if (holder.getAdapterItemView() != null) {
-            holder.getAdapterItemView().onViewRecycled(holder, obtainListItemData(holder));
+        if (!isHeadFootViewType(holder.getItemViewType())) {
+            findItemViewHolder(holder.getItemViewType()).onViewRecycled(holder, obtainListItemData(holder));
         }
     }
 
     @Override
     public void onViewAttachedToWindow(CommonViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        if (holder.getAdapterItemView() != null) {
-            holder.getAdapterItemView().onViewAttachedToWindow(holder, obtainListItemData(holder));
+        if (!isHeadFootViewType(holder.getItemViewType())) {
+            findItemViewHolder(holder.getItemViewType()).onViewAttachedToWindow(holder, obtainListItemData(holder));
         }
     }
 
     @Override
     public void onViewDetachedFromWindow(CommonViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        if (holder.getAdapterItemView() != null) {
-            holder.getAdapterItemView().onViewDetachedFromWindow(holder, obtainListItemData(holder));
+        positionTypeMap.remove(holder.getItemViewType());
+        if (!isHeadFootViewType(holder.getItemViewType())) {
+            findItemViewHolder(holder.getItemViewType()).onViewDetachedFromWindow(holder, obtainListItemData(holder));
         }
     }
 
@@ -130,20 +137,19 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         if (position >= hCount && position < hCount + listData.size()) {
             holder.setHeadCount(getHeaderCount());
             holder.getRootView().setTag(RECYCLER_CLICK, holder.getItemPosition());
-
             holder.setHeadCount(hCount);
             Object item = listData.get(holder.getItemPosition());
-            AbstractAdapterItemView vh = findItemViewHolder(holder.getItemPosition());
+            AbstractAdapterItemView vh = findItemViewHolder(holder.getItemViewType());
             vh.onBindViewHolder(holder, item);
         }
     }
 
     @NonNull
-    private AbstractAdapterItemView findItemViewHolder(int position) {
-        Object data = listData.get(position);
-        AbstractAdapterItemView item = mItemTypesOffset.get(data.getClass());
+    private AbstractAdapterItemView findItemViewHolder(int viewType) {
+        int realType = viewType / 100 - positionTypeMap.get(viewType);
+        AbstractAdapterItemView item = itemViewList.get(realType);
         if (item == null) {
-            throw new NullPointerException("not register " + data.getClass() + " map BaseItemViewHolder");
+            throw new NullPointerException("not register map BaseItemViewHolder");
         }
         return item;
     }
@@ -156,11 +162,11 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         } else if (viewType < FOOTERS_START + getFooterCount()) {
             return new CommonViewHolder(mFooterViews.get(viewType - FOOTERS_START));
         } else {
-            Object object = listData.get(viewType);
+            int typePosition = findItemTypeIndex(viewType);
             AbstractAdapterItemView vh = findItemViewHolder(viewType);
-            View v = getLayoutView(viewGroup, vh.getLayoutId(viewType, object));
-            CommonViewHolder viewHolder = vh.onCreateViewHolder(v, viewType, object);
-            viewHolder.onBindAdapterItemView(vh);
+            int realType = viewType / 100 - typePosition;
+            View v = getLayoutView(viewGroup, vh.getLayoutId(realType));
+            CommonViewHolder viewHolder = vh.onCreateViewHolder(v, realType);
             viewHolder.setOnClickListener(this);
             return viewHolder;
         }
@@ -205,10 +211,23 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         if (position < hCount) {
             return HEADERS_START + position;
         } else if (position < hCount + itemCount) {
-            return position - hCount;
+            return findItemType(position - hCount);
         } else {
             return FOOTERS_START + position - hCount - itemCount;
         }
+    }
+
+    private int findItemType(int position) {
+        Object item = listData.get(position);
+        int indexOf = classList.indexOf(item.getClass());
+        int viewType = itemViewList.get(indexOf).getItemViewType(position, item);
+        int result = indexOf * 100 + viewType + indexOf;
+        positionTypeMap.put(result, indexOf);
+        return result;
+    }
+
+    private int findItemTypeIndex(int viewType) {
+        return positionTypeMap.get(viewType);
     }
 
     public void setOnItemClickListener(OnRecyclerItemClickListener onRecyclerClickListener) {
