@@ -4,7 +4,7 @@ package com.chaek.android.library;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implements View.OnClickListener {
@@ -91,10 +90,10 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     @Override
     public void onViewDetachedFromWindow(CommonViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        positionTypeMap.remove(holder.getItemViewType());
         if (!isHeadFootViewType(holder.getItemViewType())) {
             findItemViewHolder(holder.getItemViewType()).onViewDetachedFromWindow(holder, obtainListItemData(holder));
         }
+//        positionTypeMap.remove(holder.getItemViewType());
     }
 
     private Object obtainListItemData(CommonViewHolder holder) {
@@ -146,8 +145,11 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
 
     @NonNull
     private AbstractAdapterItemView findItemViewHolder(int viewType) {
-        int realType = viewType / 100 - positionTypeMap.get(viewType);
-        AbstractAdapterItemView item = itemViewList.get(realType);
+        Log.e("1111111111",viewType+"");
+        Log.e("1111111111",positionTypeMap.toString()+"");
+        int indexOf = positionTypeMap.get(viewType);
+//        int realType = viewType - indexOf * 100 - indexOf;
+        AbstractAdapterItemView item = itemViewList.get(indexOf);
         if (item == null) {
             throw new NullPointerException("not register map BaseItemViewHolder");
         }
@@ -162,9 +164,9 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         } else if (viewType < FOOTERS_START + getFooterCount()) {
             return new CommonViewHolder(mFooterViews.get(viewType - FOOTERS_START));
         } else {
-            int typePosition = findItemTypeIndex(viewType);
+            int indexOf = findItemTypeIndex(viewType);
             AbstractAdapterItemView vh = findItemViewHolder(viewType);
-            int realType = viewType / 100 - typePosition;
+            int realType = viewType - indexOf * 100;
             View v = getLayoutView(viewGroup, vh.getLayoutId(realType));
             CommonViewHolder viewHolder = vh.onCreateViewHolder(v, realType);
             viewHolder.setOnClickListener(this);
@@ -221,7 +223,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         Object item = listData.get(position);
         int indexOf = classList.indexOf(item.getClass());
         int viewType = itemViewList.get(indexOf).getItemViewType(position, item);
-        int result = indexOf * 100 + viewType + indexOf;
+        int result = indexOf * 100 + viewType;
         positionTypeMap.put(result, indexOf);
         return result;
     }
