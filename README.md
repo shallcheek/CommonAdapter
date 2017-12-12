@@ -3,10 +3,8 @@
  RecyclerView.Adapter ,compatible with Android 4.0+.
 
 ## gradle
-
- 
 ``` 
- implementation 'com.chaek.android:commonAdapter:1.0.0'
+ implementation 'com.chaek.android:commonAdapter:1.0.1'
 ```
 
 ## example
