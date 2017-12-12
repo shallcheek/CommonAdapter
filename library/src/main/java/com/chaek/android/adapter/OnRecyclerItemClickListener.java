@@ -1,4 +1,4 @@
-package com.chaek.android.library;
+package com.chaek.android.adapter;
 
 /**
  * RecyclerView Adapter item onClick Listener

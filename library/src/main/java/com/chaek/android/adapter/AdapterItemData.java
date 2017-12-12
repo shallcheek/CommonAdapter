@@ -1,4 +1,4 @@
-package com.chaek.android.library;
+package com.chaek.android.adapter;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -20,6 +20,4 @@ public @interface AdapterItemData {
      * @return class数组
      */
     Class<?>[] value();
-
-
 }

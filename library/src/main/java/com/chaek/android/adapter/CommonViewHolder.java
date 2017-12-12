@@ -1,4 +1,4 @@
-package com.chaek.android.library;
+package com.chaek.android.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -32,9 +32,6 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
         rootView = itemView;
     }
 
-    public void setRootView(View rootView) {
-        this.rootView = rootView;
-    }
 
     /**
      * @return 获取当前rootView

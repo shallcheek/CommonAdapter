@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.chaek.android.library.AbstractAdapterItemView;
-import com.chaek.android.library.AdapterItemData;
-import com.chaek.android.library.CommonAdapter;
-import com.chaek.android.library.CommonViewHolder;
-import com.chaek.android.library.OnRecyclerItemClickListener;
+import com.chaek.android.adapter.AbstractAdapterItemView;
+import com.chaek.android.adapter.AdapterItemData;
+import com.chaek.android.adapter.CommonAdapter;
+import com.chaek.android.adapter.CommonViewHolder;
+import com.chaek.android.adapter.OnRecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;

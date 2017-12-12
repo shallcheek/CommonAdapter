@@ -9,11 +9,11 @@ import android.view.View;
 
 import com.chaek.android.BaseFragment;
 import com.chaek.android.R;
-import com.chaek.android.library.AbstractAdapterItemView;
-import com.chaek.android.library.AdapterItemData;
-import com.chaek.android.library.CommonAdapter;
-import com.chaek.android.library.CommonSpanSizeLookup;
-import com.chaek.android.library.CommonViewHolder;
+import com.chaek.android.adapter.AbstractAdapterItemView;
+import com.chaek.android.adapter.AdapterItemData;
+import com.chaek.android.adapter.CommonAdapter;
+import com.chaek.android.adapter.CommonSpanSizeLookup;
+import com.chaek.android.adapter.CommonViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,15 +58,14 @@ public class StoreFragment extends BaseFragment {
 
         gridLayoutManager.setSpanSizeLookup(new CommonSpanSizeLookup(commonAdapter, 4) {
             @Override
-            protected int getCommonSpanSize(int position) {
-                Object p = commonAdapter.getListItem(position);
-                if (p instanceof RecommendItem) {
+            protected int getCommonSpanSize(int position, Object listItem) {
+                if (listItem instanceof RecommendItem) {
                     return 2;
                 }
-                if (p instanceof CateItem) {
+                if (listItem instanceof CateItem) {
                     return 1;
                 }
-                if (p instanceof AppItem) {
+                if (listItem instanceof AppItem) {
                     return 4;
                 }
                 return 4;
@@ -85,7 +84,12 @@ public class StoreFragment extends BaseFragment {
     public static class StoreAppItemView extends AbstractAdapterItemView<AppItem, CommonViewHolder> {
 
         @Override
-        public int getLayoutId(int position) {
+        public int getItemViewType(int position, @NonNull AppItem data) {
+            return 11;
+        }
+
+        @Override
+        public int getLayoutId(int viewType) {
             return R.layout.stort_app_item_view;
         }
 
@@ -95,7 +99,7 @@ public class StoreFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
             return new CommonViewHolder(view);
         }
     }
@@ -104,7 +108,7 @@ public class StoreFragment extends BaseFragment {
     public static class StoreCateItemView extends AbstractAdapterItemView<CateItem, CommonViewHolder> {
 
         @Override
-        public int getLayoutId(int position) {
+        public int getLayoutId(int viewType) {
             return R.layout.stort_cate_item_view;
         }
 
@@ -114,7 +118,7 @@ public class StoreFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
             return new CommonViewHolder(view);
         }
     }
@@ -134,7 +138,7 @@ public class StoreFragment extends BaseFragment {
         }
 
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int position) {
+        public CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
             return new CommonViewHolder(view);
         }
     }

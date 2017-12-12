@@ -1,4 +1,4 @@
-package com.chaek.android.library;
+package com.chaek.android.adapter;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
@@ -20,7 +20,6 @@ import android.view.ViewGroup;
  * <p>
  *
  * @author: Chaek
- * @data: 2017/12/6
  */
 public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
 
@@ -52,13 +51,18 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * 创建成view 查看{@link CommonAdapter#onCreateViewHolder(ViewGroup, int)} }
      *
      * @param viewType viewType
-     * @return 布局文件
+     * @return layout id
      */
     @LayoutRes
     public abstract int getLayoutId(int viewType);
 
+
     /**
-     * 获取itemViewType
+     * 获取viewType 范围0-100
+     *
+     * @param position list position
+     * @param data     数据
+     * @return View Type
      */
     @IntRange(from = 0, to = 100)
     public int getItemViewType(int position, @NonNull T data) {
@@ -75,9 +79,6 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      */
     public abstract void onBindViewHolder(@NonNull R vh, @NonNull T data);
 
-    public AbstractAdapterItemView<T, R> getAdapterItemView(int viewType) {
-        return this;
-    }
 
     /**
      * 初始化创建 BaseViewHolder
@@ -95,6 +96,8 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param data   数据源 可能为空
      */
     public void onViewRecycled(@NonNull R holder, T data) {
+        holder.setOnClickListener(null);
+        holder.onBindAdapterItemView(null);
     }
 
     /**
@@ -113,7 +116,6 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param data   数据源 可能为空
      */
     public void onViewDetachedFromWindow(@NonNull R holder, T data) {
-        holder.setOnClickListener(null);
-        holder.onBindAdapterItemView(null);
+
     }
 }
