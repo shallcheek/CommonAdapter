@@ -96,8 +96,6 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param data   数据源 可能为空
      */
     public void onViewRecycled(@NonNull R holder, T data) {
-        holder.setOnClickListener(null);
-        holder.onBindAdapterItemView(null);
     }
 
     /**
@@ -116,6 +114,5 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param data   数据源 可能为空
      */
     public void onViewDetachedFromWindow(@NonNull R holder, T data) {
-
     }
 }
