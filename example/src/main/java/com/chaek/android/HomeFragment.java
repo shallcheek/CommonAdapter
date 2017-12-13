@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.chaek.android.adapter.AbstractAdapterItemView;
-import com.chaek.android.adapter.AdapterItemData;
+import com.chaek.android.adapter.AbstractItemView;
+import com.chaek.android.adapter.BindItemData;
 import com.chaek.android.adapter.CommonAdapter;
 import com.chaek.android.adapter.CommonViewHolder;
 import com.chaek.android.adapter.OnRecyclerItemClickListener;
@@ -45,26 +45,50 @@ public class HomeFragment extends BaseFragment {
     public void initView() {
         mList = (RecyclerView) findViewById(R.id.list);
         mList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        CommonAdapter commonAdapter = new CommonAdapter().register(MainItemView.class);
-        List<String> list = new ArrayList<>();
+        final CommonAdapter commonAdapter = new CommonAdapter().register(MainItemView.class);
+        final List<Object> list = new ArrayList<>();
         list.add("应用商店");
-        list.add("关于我们");
+        list.add("聊天对话");
         list.add("样式1");
         list.add("样式2");
+        list.add(1);
+        list.add(2);
         commonAdapter.setListData(list);
-        commonAdapter.addListData(1);
-        commonAdapter.addListData(2);
         commonAdapter.setOnItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onClick(Object t, int index) {
                 mainSwitchListener.switchFragment(index);
+                if (index > 1) {
+                    list.remove(index);
+                    commonAdapter.diffListData(list);
+                }
             }
         });
-        commonAdapter.addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view, mList, false));
-        mList.setAdapter(commonAdapter);
-        commonAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view, mList, false));
-        commonAdapter.notifyDataSetChanged();
         mList.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));
+
+        View v;
+        commonAdapter.addHeaderView(v = LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view, mList, false));
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonAdapter.removeHeadView(v);
+            }
+        });
+        for (int i = 0; i < 4; i++) {
+            final View f = LayoutInflater.from(mList.getContext()).inflate(R.layout.stort_recommend_item_view, mList, false);
+            TextView text = f.findViewById(R.id.title);
+            text.setText("底部" + i);
+            f.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    commonAdapter.removeFootView(f);
+                }
+            });
+            commonAdapter.addFooterView(f);
+        }
+        mList.setAdapter(commonAdapter);
+        commonAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -72,9 +96,8 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    @AdapterItemData(value = {String.class, Integer.class})
-    public static class MainItemView extends AbstractAdapterItemView<Object, CommonViewHolder> {
-
+    @BindItemData(value = {String.class, Integer.class})
+    public static class MainItemView extends AbstractItemView<Object, CommonViewHolder> {
 
         @Override
         public int getLayoutId(int viewType) {

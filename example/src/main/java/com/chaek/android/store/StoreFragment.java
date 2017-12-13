@@ -9,8 +9,8 @@ import android.view.View;
 
 import com.chaek.android.BaseFragment;
 import com.chaek.android.R;
-import com.chaek.android.adapter.AbstractAdapterItemView;
-import com.chaek.android.adapter.AdapterItemData;
+import com.chaek.android.adapter.AbstractItemView;
+import com.chaek.android.adapter.BindItemData;
 import com.chaek.android.adapter.CommonAdapter;
 import com.chaek.android.adapter.CommonSpanSizeLookup;
 import com.chaek.android.adapter.CommonViewHolder;
@@ -80,13 +80,10 @@ public class StoreFragment extends BaseFragment {
 
     }
 
-    @AdapterItemData(AppItem.class)
-    public static class StoreAppItemView extends AbstractAdapterItemView<AppItem, CommonViewHolder> {
 
-        @Override
-        public int getItemViewType(int position, @NonNull AppItem data) {
-            return 11;
-        }
+    @BindItemData(AppItem.class)
+    public static class StoreAppItemView extends AbstractItemView<AppItem, CommonViewHolder> {
+
 
         @Override
         public int getLayoutId(int viewType) {
@@ -104,8 +101,8 @@ public class StoreFragment extends BaseFragment {
         }
     }
 
-    @AdapterItemData(CateItem.class)
-    public static class StoreCateItemView extends AbstractAdapterItemView<CateItem, CommonViewHolder> {
+    @BindItemData(CateItem.class)
+    public static class StoreCateItemView extends AbstractItemView<CateItem, CommonViewHolder> {
 
         @Override
         public int getLayoutId(int viewType) {
@@ -123,8 +120,8 @@ public class StoreFragment extends BaseFragment {
         }
     }
 
-    @AdapterItemData(RecommendItem.class)
-    public static class StoreRecommendItemView extends AbstractAdapterItemView<RecommendItem, CommonViewHolder> {
+    @BindItemData(RecommendItem.class)
+    public static class StoreRecommendItemView extends AbstractItemView<RecommendItem, CommonViewHolder> {
 
 
         @Override

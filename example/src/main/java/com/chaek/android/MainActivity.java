@@ -3,6 +3,7 @@ package com.chaek.android;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.chaek.android.chat.ChatFragment;
 import com.chaek.android.store.StoreFragment;
 
 public class MainActivity extends AppCompatActivity implements MainSwitchListener {
@@ -30,8 +31,12 @@ public class MainActivity extends AppCompatActivity implements MainSwitchListene
                         .multi()
                         .fragment(StoreFragment.class)
                         .into(R.id.main);
-
-
+                break;
+            case 1:
+                Fragments.with(this)
+                        .addToBackStack()
+                        .fragment(ChatFragment.class)
+                        .into(R.id.main);
                 break;
             default:
         }
