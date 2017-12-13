@@ -2,57 +2,76 @@
 
  RecyclerView.Adapter ,compatible with Android 4.0+.
 
-## gradle
+## Gradle
 ``` 
- implementation 'com.chaek.android:commonAdapter:1.0.1'
+ implementation 'com.chaek.android:commonAdapter:1.0.2'
 ```
 
-## example
+## Example
 ``` 
-        CommonAdapter commonAdapter = new CommonAdapter().register(MainItemView.class);
-        List<String> list = new ArrayList<>();
-        list.add("应用商店");
-        list.add("关于我们");
-        list.add("样式1");
-        list.add("样式2");
-        commonAdapter.setListData(list);
-        commonAdapter.addListData(1);
-        commonAdapter.addListData(2);
-        commonAdapter.setOnItemClickListener(new OnRecyclerItemClickListener() {
-            @Override
-            public void onClick(Object t, int index) {
-                mainSwitchListener.switchFragment(index);
-            }
-        });
-        commonAdapter.addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view,mList,false));
-        mList.setAdapter(commonAdapter);
-        commonAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.stort_recommend_item_view,mList,false));
-        commonAdapter.notifyDataSetChanged();
-        mList.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));
-    
-        @AdapterItemData(value = {String.class, Integer.class})
-        public static class MainItemView extends AbstractAdapterItemView<Object, CommonViewHolder> {
-    
-            @Override
-            public int getLayoutId(int position, @NonNull Object data) {
-                return R.layout.main_item_view;
-            }
-    
-            @Override
-            public void onBindViewHolder(@NonNull CommonViewHolder vh, @NonNull Object data) {
-                TextView t = vh.findViewById(R.id.btn1);
-                if (data instanceof String) {
-                    t.setText(data.toString());
-                } else if (data instanceof Integer) {
-                    t.setText(data + "");
-                }
-            }
-    
-            @Override
-            public CommonViewHolder onCreateViewHolder(@NonNull View view, int position, @NonNull Object data) {
-                return new CommonViewHolder(view);
-            }
-        }
+              CommonAdapter commonAdapter = new CommonAdapter().register(ChatItemView.class,ChatTimeView.class);
+               
+               List<Object> chatData = new ArrayList<>();
+               chatData.add(new ChatData(0, "(｡･∀･)ﾉﾞ嗨"));
+               chatData.add("10分钟前");
+               chatData.add(new ChatData(0, "你在做什么"));
+               chatData.add(new ChatData(1, "我在看电视剧呢！"));
+               chatData.add(new ChatData(0, "什么电视剧，我最近都没电视剧追了"));
+               chatData.add("3分钟前");
+               chatData.add(new ChatData(1, "xxxxxxxx"));
+               chatData.add(new ChatData(0, "讲的是什么"));
+               chatData.add("刚刚");
+               chatData.add(new ChatData(1, "每天都会跟着来来往往的居民走，送他们上班，再迎接他们下班，每天积极努力地融进这个小区，它不像其他流浪狗一样害怕人，反而很喜欢人，兽医说它很健康，是一只开心的小狗，如果能有一个爱它的主人，它一定会成为一只幸福的狗狗"));
+               chatData.add(new ChatData(1, "今天美丽的山城迎来了第二届国际机器人检测认证高峰论坛。这个论坛成为机器人检测认证国际交流与合作的重要平台，对于促进机器人产业发展起到了有力的推动作用。厉害了我的重庆！最后，祝本届论坛圆满成功"));
+      
+              commonAdapter.setListData(chatData);
+              mList.setAdapter(commonAdapter);
+              
+              
+              @BindItemData(ChatData.class)
+              public class ChatItemView extends AbstractItemView<ChatData, ChatItemView.ChatViewHolder> {
+                  private static final int LEFT = 0;
+                  private static final int RIGHT = 1;
+              
+                  @Override
+                  public int getItemViewType(int position, @NonNull ChatData data) {
+                      return data.getMessageType();
+                  }
+              
+                  @Override
+                  public int getLayoutId(int viewType) {
+                      if (viewType == LEFT) {
+                          return R.layout.chat_left_view;
+                      } else {
+                          return R.layout.chat_right_view;
+                      }
+                  }
+              
+                  @Override
+                  public void onBindViewHolder(@NonNull ChatViewHolder vh, @NonNull ChatData data) {
+                      vh.mChatContent.setText(data.getMessage());
+                  }
+              
+                  @Override
+                  public ChatViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
+                      return new ChatViewHolder(view);
+                  }
+              
+                  public static class ChatViewHolder extends CommonViewHolder {
+                      private TextView mChatTime;
+                      private TextView mChatUserHead;
+                      private TextView mChatContent;
+              
+              
+                      public ChatViewHolder(View itemView) {
+                          super(itemView);
+                          mChatTime = (TextView) findViewById(R.id.chat_time);
+                          mChatUserHead = (TextView) findViewById(R.id.chat_user_head);
+                          mChatContent = (TextView) findViewById(R.id.chat_content);
+              
+                      }
+                  }
+              }
     
 ```
 
