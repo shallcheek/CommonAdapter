@@ -15,7 +15,7 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
 
     private View rootView;
     public Context mContext;
-    private AbstractAdapterItemView adapterItemView;
+    private AbstractItemView adapterItemView;
 
     /**
      * 设置当前CommonAdapter 的头部视图数量 用来获取ViewHolder对应数据源的位置
@@ -53,7 +53,7 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
      * @return 获取用来获取ViewHolder对应数据源的位置
      */
     public int getItemPosition() {
-        int index = getAdapterPosition() - headCount;
+        int index = getLayoutPosition() - headCount;
         return index < 0 ? 0 : index;
     }
 
@@ -73,14 +73,14 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
      *
      * @param adapterItemView AbstractAdapterItemView
      */
-    public void onBindAdapterItemView(AbstractAdapterItemView adapterItemView) {
+    public void onBindAdapterItemView(AbstractItemView adapterItemView) {
         this.adapterItemView = adapterItemView;
     }
 
     /**
      * @return 获取AbstractAdapterItemView
      */
-    public AbstractAdapterItemView getAdapterItemView() {
+    public AbstractItemView getAdapterItemView() {
         return adapterItemView;
     }
 }

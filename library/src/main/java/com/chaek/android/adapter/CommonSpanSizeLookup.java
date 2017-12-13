@@ -20,7 +20,7 @@ public abstract class CommonSpanSizeLookup extends GridLayoutManager.SpanSizeLoo
         if (commonAdapter.isHeadFootView(position)) {
             return mSpanSize;
         }
-        return getCommonSpanSize(commonAdapter.getPosition(position), commonAdapter.getItemData(position));
+        return getCommonSpanSize(commonAdapter.getPosition(position), commonAdapter.getListItemData(position));
     }
 
     /**

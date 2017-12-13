@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * 配合{@link CommonAdapter} 和 {@link AbstractAdapterItemView} 使用注解类
+ * 配合{@link CommonAdapter} 和 {@link AbstractItemView} 使用注解类
  * <br>
  * 绑定数据源的class与AdapterItemView的关系
  * <br>
@@ -13,7 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AdapterItemData {
+public @interface BindItemData {
     /**
      * 对应的class
      *

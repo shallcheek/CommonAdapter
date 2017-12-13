@@ -16,12 +16,12 @@ import android.view.ViewGroup;
  * <br>
  * 重写 <br>{@link #getLayoutId(int)},<br>{@link #onCreateViewHolder(View, int)},<br>{@link #onBindViewHolder(CommonViewHolder, Object)}
  * 即可<br>
- * 注意事项:继承AbstractAdapterItemView使用一定要对应的注解相应的数据源格式 {@link AdapterItemData}
+ * 注意事项:继承AbstractAdapterItemView使用一定要对应的注解相应的数据源格式 {@link BindItemData}
  * <p>
  *
  * @author: Chaek
  */
-public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
+public abstract class AbstractItemView<T, R extends CommonViewHolder> {
 
     protected CommonAdapter commonAdapter;
 
@@ -87,7 +87,7 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param viewType 数据源中的 index 可能不是Adapter的实际 position 查看{@link CommonAdapter#getItemViewType(int)}
      * @return 新建的BaseViewHolder
      */
-    public abstract R onCreateViewHolder(@NonNull View view, int viewType);
+    public abstract CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType);
 
     /**
      * 同{@link RecyclerView.Adapter#onViewRecycled(RecyclerView.ViewHolder)}
@@ -114,5 +114,9 @@ public abstract class AbstractAdapterItemView<T, R extends CommonViewHolder> {
      * @param data   数据源 可能为空
      */
     public void onViewDetachedFromWindow(@NonNull R holder, T data) {
+    }
+
+    public long getItemId(int position, T data) {
+        return RecyclerView.NO_ID;
     }
 }
