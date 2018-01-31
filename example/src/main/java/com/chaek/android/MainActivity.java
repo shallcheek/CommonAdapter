@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.chaek.android.chat.ChatFragment;
 import com.chaek.android.store.StoreFragment;
 
+import chaek.com.android.Fragments;
+
 public class MainActivity extends AppCompatActivity implements MainSwitchListener {
 
 

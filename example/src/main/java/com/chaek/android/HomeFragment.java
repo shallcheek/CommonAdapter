@@ -28,6 +28,7 @@ public class HomeFragment extends BaseFragment {
 
     private MainSwitchListener mainSwitchListener;
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
