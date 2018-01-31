@@ -26,5 +26,6 @@ dependencies {
     implementation 'com.github.shallcheek:RatingBar:v1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.chaek.android:fragments:1.0.0'
-    implementation project(':library')
+    implementation 'com.chaek.android:commonAdapter:1.0.5'
+//    implementation project(':library')
 }

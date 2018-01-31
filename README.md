@@ -4,11 +4,11 @@
 
 ## Gradle
 ``` 
- implementation 'com.chaek.android:commonAdapter:1.0.2'
+ implementation 'com.chaek.android:commonAdapter:1.0.5'
 ```
 
 ## Example
-``` 
+```java 
               CommonAdapter commonAdapter = new CommonAdapter().register(ChatItemView.class,ChatTimeView.class);
                
                List<Object> chatData = new ArrayList<>();

@@ -60,7 +60,7 @@ public class HomeFragment extends BaseFragment {
                 mainSwitchListener.switchFragment(index);
                 if (index > 1) {
                     list.remove(index);
-                    commonAdapter.diffListData(list);
+                    commonAdapter.notifyItemRemoved(commonAdapter.getHeaderCount() + index);
                 }
             }
         });
@@ -81,7 +81,10 @@ public class HomeFragment extends BaseFragment {
             f.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    commonAdapter.removeFootView(f);
+                    List<Object> objects=new ArrayList<>();
+                    objects.add("测试样式1");
+                    objects.add("测试样式1");
+                    commonAdapter.addListData(objects);
                 }
             });
             commonAdapter.addFooterView(f);
