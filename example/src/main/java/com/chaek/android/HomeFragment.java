@@ -85,7 +85,8 @@ public class HomeFragment extends BaseFragment {
                     List<Object> objects=new ArrayList<>();
                     objects.add("测试样式1");
                     objects.add("测试样式1");
-                    commonAdapter.addListData(objects);
+                    commonAdapter.add(objects);
+                    commonAdapter.notifyDataSetChanged();
                 }
             });
             commonAdapter.addFooterView(f);

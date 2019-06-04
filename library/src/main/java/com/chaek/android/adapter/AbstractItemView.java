@@ -14,19 +14,14 @@ import android.view.ViewGroup;
  * <br>
  * <code>new CommonKyAdapter().register(AbstractAdapterItemView.class)</code>
  * <br>
- * 重写 <br>{@link #getLayoutId(int)},<br>{@link #onCreateViewHolder(View, int)},<br>{@link #onBindViewHolder(CommonViewHolder, Object)}
- * 即可<br>
  * 注意事项:继承AbstractAdapterItemView使用一定要对应的注解相应的数据源格式 {@link BindItemData}
- * <p>
- *
- * @author: Chaek
  */
 public abstract class AbstractItemView<T, R extends CommonViewHolder> {
 
     protected CommonAdapter commonAdapter;
 
     /**
-     * 赋值 commonAdapter 参考{@link CommonAdapter#register(Class[])} }
+     * 赋值 commonAdapter 参考{@link CommonAdapter#register(Class[])}  }
      * 在初始化时 注册当前<code>AbstractAdapterItemView</code> 赋值可让<code>AbstractAdapterItemView</code>持有CommonKyAdapter对象
      * <p>
      * 获取CommonKyAdapter 实例操作应该在调用 setCommonAdapter之后在自己构建AbstractAdapterItemView的构造函数中调用会出现null
@@ -71,9 +66,8 @@ public abstract class AbstractItemView<T, R extends CommonViewHolder> {
 
     /**
      * 将item 与 ViewHolder绑定起来 用作正常的参数设置数据绑定
-     * BaseViewHolder 中可获取到context实例 来自与View {@link View#getContext()}
+     * BaseViewHolder 中可获取到context实例 来自与View
      * 也可获取AbstractAdapterItemView绑定的实例
-     *
      * @param vh   对应的BaseViewHolder
      * @param data item data 数据
      */
@@ -89,32 +83,22 @@ public abstract class AbstractItemView<T, R extends CommonViewHolder> {
      */
     public abstract CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType);
 
-    /**
-     * 同{@link RecyclerView.Adapter#onViewRecycled(RecyclerView.ViewHolder)}
-     *
-     * @param holder Holder of the view being attached
-     * @param data   数据源 可能为空
-     */
-    public void onViewRecycled(@NonNull R holder, T data) {
-    }
 
-    /**
-     * 同{@link RecyclerView.Adapter#onViewAttachedToWindow(RecyclerView.ViewHolder)}
-     *
-     * @param holder Holder of the view being attached
-     * @param data   数据源 可能为空
-     */
-    public void onViewAttachedToWindow(@NonNull R holder, T data) {
-    }
 
     /**
      * 同{@link RecyclerView.Adapter#onViewDetachedFromWindow(RecyclerView.ViewHolder)}
      *
      * @param holder Holder of the view being attached
-     * @param data   数据源 可能为空
      */
-    public void onViewDetachedFromWindow(@NonNull R holder, T data) {
+    public void onViewDetachedFromWindow(@NonNull R holder) {
     }
+
+    public void onViewAttachedToWindow(@NonNull R holder) {
+    }
+
+    public void onViewRecycled(@NonNull R holder) {
+    }
+
 
     public long getItemId(int position, T data) {
         return RecyclerView.NO_ID;

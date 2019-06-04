@@ -2,23 +2,22 @@
 
 package com.chaek.android.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
 /**
  * @author Chaek
  */
-public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implements View.OnClickListener {
+public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     private static final String TAG = "CommonAdapter";
     /**
      * item 点击事件的保存data的的tag id
@@ -31,7 +30,6 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     private static final int HEADERS_START = Integer.MIN_VALUE;
     private static final int FOOTERS_START = Integer.MIN_VALUE + MAX_ITEM_TYPE;
     private List<View> mHeaderViews, mFooterViews;
-    private Context mContext;
     /**
      * 数据源
      */
@@ -54,8 +52,9 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
      */
     private ArrayMap<Integer, Integer> positionTypeMap;
 
+
     public CommonAdapter() {
-        this(null);
+        this(new ArrayList());
     }
 
     /**
@@ -78,11 +77,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         classList = new ArrayList<>();
         itemViewList = new ArrayList<>();
         positionTypeMap = new ArrayMap<>();
-        if (listData != null) {
-            mListData = listData;
-        } else {
-            mListData = new ArrayList<>();
-        }
+        mListData = listData;
     }
 
     /**
@@ -176,7 +171,6 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
 
     @Override
     public CommonViewHolder onCreateViewHolder(ViewGroup viewGroup, final int viewType) {
-        this.mContext = viewGroup.getContext();
         if (viewType < HEADERS_START + getHeaderCount()) {
             return new CommonViewHolder(mHeaderViews.get(viewType - HEADERS_START));
         } else if (viewType < FOOTERS_START + getFooterCount()) {
@@ -191,7 +185,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
             int realType = viewType - indexOf * MAX_ITEM_TYPE;
             View v = getLayoutView(viewGroup, vh.getLayoutId(realType));
             CommonViewHolder viewHolder = vh.onCreateViewHolder(v, realType);
-            viewHolder.setOnClickListener(this);
+            viewHolder.setOnClickListener(onItemClickList);
             return viewHolder;
         }
     }
@@ -236,7 +230,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     public void onViewRecycled(CommonViewHolder holder) {
         super.onViewRecycled(holder);
         if (!isHeadFootViewType(holder.getItemViewType())) {
-            findItemViewHolder(holder.getItemViewType()).onViewRecycled(holder, obtainListItemData(holder));
+            findItemViewHolder(holder.getItemViewType()).onViewRecycled(holder);
         }
     }
 
@@ -247,7 +241,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     public void onViewAttachedToWindow(CommonViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         if (!isHeadFootViewType(holder.getItemViewType())) {
-            findItemViewHolder(holder.getItemViewType()).onViewAttachedToWindow(holder, obtainListItemData(holder));
+            findItemViewHolder(holder.getItemViewType()).onViewAttachedToWindow(holder);
         }
     }
 
@@ -258,7 +252,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
     public void onViewDetachedFromWindow(CommonViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         if (!isHeadFootViewType(holder.getItemViewType())) {
-            findItemViewHolder(holder.getItemViewType()).onViewDetachedFromWindow(holder, obtainListItemData(holder));
+            findItemViewHolder(holder.getItemViewType()).onViewDetachedFromWindow(holder);
         }
     }
 
@@ -282,7 +276,6 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
      * <br>
      * 需要注意调用{@link #notifyDataSetChanged()} 刷新界面
      * <br>
-     * 如果需要<code>DiffUtil</code> 刷新数据 则调用{@link #diffListData(List)}方法
      * 设置list参数会自动刷新界面 无需调用{@link #notifyDataSetChanged()}
      *
      * @param mListData list数据 list item 可以是任意数据格式 但是对应得格式都需要注册{@link #register(Class[])}
@@ -298,38 +291,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
      */
     public void replaceList(List list) {
         this.mListData.clear();
-        this.mListData.add(list);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Diff刷新界面 Adapter 根据toString()进行比对
-     * <br>
-     * 如自带的XDiffCallback无法满足需求可以按照此修改<br>
-     * 注意 需要处理添加头部View之后position并不是list的position 可继承ListUpdateCallBack需要继承{@link CommonListUpdateCallBack }<br>
-     * 里面处理了因为添加头部View之后数据源的list<br>
-     * 下标位置并不是Adapter中的下标位置<br>
-     * 也最好在线程中计算 主线程更新<br>
-     *
-     * @param newList 新的数据 注意新的list 不能跟list是同一个
-     */
-    @Deprecated
-    public void diffListData(List newList) {
-        CommonXDiffCallback xDiffCallback = new CommonXDiffCallback(getListData(), newList) {
-            @Override
-            protected boolean areItemsTheSame(Object oldItem, Object newItem) {
-                return oldItem.toString().equals(newItem.toString());
-            }
-
-            @Override
-            protected boolean areContentsTheSame(Object oldItem, Object newItem) {
-                return oldItem.equals(newItem);
-            }
-        };
-
-        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(xDiffCallback);
-        replaceList(newList);
-        diffResult.dispatchUpdatesTo(new CommonListUpdateCallBack(this));
+        this.mListData.addAll(list);
     }
 
     /**
@@ -338,8 +300,11 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
      * @param object 数据 任意参数格式但是需要{@link #register(Class[])} 不然会报错
      */
     public void add(Object object) {
-        this.mListData.add(object);
-        notifyItemInserted(getHeaderCount() + mListData.size() - 1);
+        if (object instanceof Collection) {
+            this.mListData.addAll((Collection<?>) object);
+        } else {
+            this.mListData.add(object);
+        }
     }
 
     /**
@@ -347,11 +312,9 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
      *
      * @param listData list数据
      */
+    @Deprecated
     public void addListData(List<Object> listData) {
         this.mListData.addAll(listData);
-        int oldSize = mListData.size() + getHeaderCount();
-        mListData.addAll(listData);
-        notifyItemRangeInserted(oldSize, listData.size());
     }
 
     /**
@@ -383,10 +346,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         if (headView == null) {
             throw new NullPointerException("headView cannot null");
         }
-        if (mHeaderViews.contains(headView)) {
-            mHeaderViews.remove(headView);
-            notifyDataSetChanged();
-        }
+        mHeaderViews.remove(headView);
     }
 
     /**
@@ -398,10 +358,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         if (footView == null) {
             throw new NullPointerException("footView cannot null");
         }
-        if (mFooterViews.contains(footView)) {
-            mFooterViews.remove(footView);
-            notifyDataSetChanged();
-        }
+        mFooterViews.remove(footView);
     }
 
     private View getLayoutView(ViewGroup v, int layoutId) {
@@ -511,14 +468,17 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
         return !(position >= getHeaderCount() && position < (getHeaderCount() + mListData.size()));
     }
 
-    @Override
-    public void onClick(View v) {
-        CommonViewHolder commonViewHolder = (CommonViewHolder) v.getTag(RECYCLER_CLICK);
-        if (onRecyclerClickListener != null) {
-            int position = commonViewHolder.getLayoutPosition() - getHeaderCount();
-            onRecyclerClickListener.onClick(mListData.get(position), position);
+    private View.OnClickListener onItemClickList = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            CommonViewHolder commonViewHolder = (CommonViewHolder) view.getTag(RECYCLER_CLICK);
+            if (onRecyclerClickListener != null) {
+                int position = commonViewHolder.getLayoutPosition() - getHeaderCount();
+                onRecyclerClickListener.onClick(mListData.get(position), position);
+            }
         }
-    }
+    };
+
 
     public List<View> getHeaderViews() {
         return mHeaderViews;
@@ -532,18 +492,14 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonViewHolder> implem
      * 清除所有的Foot View
      */
     public void clearFootViews() {
-        int footCount = getFooterCount();
         mFooterViews.clear();
-        notifyDataSetChanged();
     }
 
     /**
      * 清除所有的Head View
      */
     public void clearHeadViews() {
-        int headCount = getHeaderCount();
         mHeaderViews.clear();
-        notifyDataSetChanged();
     }
 
 
