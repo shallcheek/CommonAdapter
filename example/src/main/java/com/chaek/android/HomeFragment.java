@@ -1,13 +1,14 @@
 package com.chaek.android;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaek.android.adapter.AbstractItemView;
 import com.chaek.android.adapter.BindItemData;
@@ -73,6 +74,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 commonAdapter.removeHeadView(v);
+                commonAdapter.notifyDataSetChanged();
             }
         });
         for (int i = 0; i < 4; i++) {
@@ -85,7 +87,7 @@ public class HomeFragment extends BaseFragment {
                     List<Object> objects=new ArrayList<>();
                     objects.add("测试样式1");
                     objects.add("测试样式1");
-                    commonAdapter.add(objects);
+                    commonAdapter.addListData(objects);
                     commonAdapter.notifyDataSetChanged();
                 }
             });

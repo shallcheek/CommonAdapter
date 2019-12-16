@@ -1,16 +1,17 @@
-package com.chaek.android.adapter;
+package com.chaek.android.adapter
 
 /**
  * RecyclerView Adapter item onClick Listener
  *
  * @author Chaek
  */
-public interface OnRecyclerItemClickListener {
+interface OnRecyclerItemClickListener<T> {
     /**
      * onClick callback
      *
      * @param t     click item data
      * @param index click item position
      */
-    void onClick(Object t, int index);
+    fun onClick(t: T, index: Int)
+
 }

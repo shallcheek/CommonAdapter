@@ -1,19 +1,23 @@
 package com.chaek.android.store;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaek.android.BaseFragment;
 import com.chaek.android.R;
 import com.chaek.android.adapter.AbstractItemView;
+import com.chaek.android.adapter.BaseItemView;
 import com.chaek.android.adapter.BindItemData;
 import com.chaek.android.adapter.CommonAdapter;
 import com.chaek.android.adapter.CommonSpanSizeLookup;
 import com.chaek.android.adapter.CommonViewHolder;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,8 @@ public class StoreFragment extends BaseFragment {
         mList = (RecyclerView) findViewById(R.id.list);
         mList.setLayoutManager(new LinearLayoutManager(getActivity()));
         final CommonAdapter commonAdapter = new CommonAdapter()
-                .register(StoreFragment.StoreAppItemView.class, StoreRecommendItemView.class)
+                .register(StoreFragment.StoreAppItemView.class)
+                .register(StoreRecommendItemView.class)
                 .register(StoreCateItemView.class);
         final List<Object> list = new ArrayList<>();
 
@@ -81,9 +86,7 @@ public class StoreFragment extends BaseFragment {
     }
 
 
-    @BindItemData(AppItem.class)
-    public static class StoreAppItemView extends AbstractItemView<AppItem, CommonViewHolder> {
-
+    public static class StoreAppItemView extends BaseItemView<AppItem> {
 
         @Override
         public int getLayoutId(int viewType) {
@@ -95,13 +98,8 @@ public class StoreFragment extends BaseFragment {
 
         }
 
-        @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
-            return new CommonViewHolder(view);
-        }
     }
 
-    @BindItemData(CateItem.class)
     public static class StoreCateItemView extends AbstractItemView<CateItem, CommonViewHolder> {
 
         @Override
@@ -114,13 +112,13 @@ public class StoreFragment extends BaseFragment {
 
         }
 
+        @NotNull
         @Override
-        public CommonViewHolder onCreateViewHolder(@NonNull View view, int viewType) {
+        public CommonViewHolder onCreateViewHolder(@NotNull View view, int viewType) {
             return new CommonViewHolder(view);
         }
     }
 
-    @BindItemData(RecommendItem.class)
     public static class StoreRecommendItemView extends AbstractItemView<RecommendItem, CommonViewHolder> {
 
 

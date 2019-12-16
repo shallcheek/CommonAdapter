@@ -1,8 +1,9 @@
 package com.chaek.android.chat;
 
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.chaek.android.R;
 import com.chaek.android.adapter.AbstractItemView;
@@ -14,7 +15,6 @@ import com.chaek.android.adapter.CommonViewHolder;
  * Date: 2017/12/13
  */
 
-@BindItemData(ChatData.class)
 public class ChatItemView extends AbstractItemView<ChatData, ChatItemView.ChatViewHolder> {
     private static final int LEFT = 0;
     private static final int RIGHT = 1;

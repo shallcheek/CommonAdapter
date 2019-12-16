@@ -1,7 +1,8 @@
 package com.chaek.android;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaek.android.chat.ChatFragment;
 import com.chaek.android.store.StoreFragment;

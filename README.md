@@ -4,7 +4,7 @@
 
 ## Gradle
 ``` 
- implementation 'com.chaek.android:commonAdapter:1.0.8'
+ implementation 'com.chaek.android:commonAdapter:1.1.0'
 ```
 
 ## Example
